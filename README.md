@@ -1,0 +1,1 @@
+# RA_vertik_sum
