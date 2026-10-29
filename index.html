@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Інтерактивний робочий зошит — Суміжні та вертикальні кути</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/caveat@latest/latin-400-normal.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f3ee;
+  --paper: #ffffff;
+  --ink: #1a2332;
+  --muted: #6b7280;
+  --accent: #4f46e5;
+  --accent-2: #0ea5e9;
+  --success: #10b981;
+  --error: #ef4444;
+  --warn: #f59e0b;
+  --line: #e5e7eb;
+  --shadow: 0 10px 30px -10px rgba(30, 41, 59, 0.15);
+}
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  background-image: 
+    radial-gradient(circle at 20% 10%, rgba(79,70,229,0.08), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(14,165,233,0.08), transparent 40%);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 24px 16px 80px;
+  line-height: 1.6;
+}
+.container { max-width: 960px; margin: 0 auto; }
+
+.header {
+  text-align: center;
+  padding: 32px 20px 28px;
+  background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+  border-radius: 24px;
+  color: white;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 20px);
+}
+.header h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 700; margin-bottom: 8px; position: relative; }
+.header p { font-size: 1rem; opacity: 0.95; position: relative; }
+.header .badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  margin-top: 12px;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.progress-wrap {
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.progress-bar { flex: 1; min-width: 200px; height: 10px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  width: 0%;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  border-radius: 999px;
+}
+.progress-text { font-weight: 600; color: var(--accent); font-size: 0.95rem; white-space: nowrap; }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px;
+  background: var(--paper);
+  border-radius: 16px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}
+.tab {
+  flex: 1;
+  min-width: 130px;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--muted);
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  position: relative;
+}
+.tab .level { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+.tab:hover { background: #f3f4f6; color: var(--ink); }
+.tab.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+}
+.tab.done::after {
+  content: '✓';
+  position: absolute;
+  top: 6px; right: 8px;
+  width: 18px; height: 18px;
+  background: var(--success);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.card {
+  background: var(--paper);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.4s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.card-num {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.card-title { font-size: 1.4rem; font-weight: 700; }
+.card-level {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #eef2ff;
+  color: var(--accent);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+.card-goal {
+  background: #fef9c3;
+  border-left: 4px solid var(--warn);
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin: 18px 0 24px;
+  font-size: 0.95rem;
+}
+.card-goal strong { color: #92400e; }
+
+.task {
+  margin-bottom: 22px;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  transition: border-color 0.3s;
+}
+.task.correct { border-color: var(--success); background: #f0fdf4; }
+.task.wrong { border-color: var(--error); background: #fef2f2; }
+
+.task-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--ink);
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 10px;
+}
+.task-text { font-size: 1rem; margin-bottom: 14px; color: var(--ink); }
+.task-text .math { font-family: 'Caveat', cursive; font-size: 1.2em; color: var(--accent); font-weight: 600; }
+.task-hint-label {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* Multiple choice options */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+@media (max-width: 500px) { .options { grid-template-columns: 1fr; } }
+.option { position: relative; }
+.option input { position: absolute; opacity: 0; pointer-events: none; }
+.option label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  min-height: 52px;
+}
+.option label:hover { border-color: var(--accent); background: #f8faff; }
+.option input:checked + label {
+  border-color: var(--accent);
+  background: #eef2ff;
+  box-shadow: 0 2px 8px rgba(79,70,229,0.15);
+}
+.option .letter {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.option input:checked + label .letter {
+  background: var(--accent);
+  color: white;
+}
+.option.correct label {
+  border-color: var(--success);
+  background: #dcfce7;
+}
+.option.correct label .letter { background: var(--success); color: white; }
+.option.wrong label {
+  border-color: var(--error);
+  background: #fee2e2;
+}
+.option.wrong label .letter { background: var(--error); color: white; }
+
+textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 12px 14px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.2s;
+  background: white;
+  color: var(--ink);
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  margin-top: 10px;
+}
+textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+textarea.ok { border-color: var(--success); }
+textarea.bad { border-color: var(--error); }
+
+.feedback {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  display: none;
+  animation: fadeIn 0.3s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.feedback.show { display: block; }
+.feedback.ok { background: #dcfce7; color: #166534; }
+.feedback.bad { background: #fee2e2; color: #991b1b; }
+.feedback.info { background: #dbeafe; color: #1e40af; }
+
+.figure {
+  background: white;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 14px 0;
+  text-align: center;
+}
+.figure svg { max-width: 100%; height: auto; }
+.figure-caption { font-size: 0.85rem; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(79,70,229,0.4); }
+.btn-secondary { background: white; color: var(--ink); border: 2px solid var(--line); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.btn-hint { background: #fef3c7; color: #92400e; }
+.btn-hint:hover { background: #fde68a; }
+
+.hint-box {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: #fffbeb;
+  border-left: 4px solid var(--warn);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  display: none;
+  color: #78350f;
+}
+.hint-box.show { display: block; animation: fadeIn 0.3s; }
+
+.drawing-area {
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 14px 0;
+  text-align: center;
+}
+.drawing-area svg { cursor: crosshair; touch-action: none; }
+.draw-controls { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.draw-btn {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.draw-btn:hover { background: #f3f4f6; }
+.draw-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* Rubric checklist */
+.rubric {
+  margin-top: 14px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.rubric-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.rubric-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.9rem;
+}
+.rubric-item:last-child { border-bottom: none; }
+.rubric-item input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--accent);
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.rubric-item label { cursor: pointer; flex: 1; }
+.rubric-score {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #eef2ff;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--accent);
+}
+
+.sample-box {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: #f0fdf4;
+  border-left: 4px solid var(--success);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #166534;
+  display: none;
+}
+.sample-box.show { display: block; animation: fadeIn 0.3s; }
+.sample-box strong { display: block; margin-bottom: 4px; }
+
+.summary {
+  background: linear-gradient(135deg, #ecfdf5, #dbeafe);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 20px;
+  text-align: center;
+  display: none;
+}
+.summary.show { display: block; animation: slideIn 0.5s; }
+.summary h3 { font-size: 1.3rem; margin-bottom: 8px; }
+.summary .score {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 10px 0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>📐 Інтерактивний робочий зошит</h1>
+    <p>Суміжні та вертикальні кути · 7 клас</p>
+    <span class="badge">6 карток · Різні рівні складності</span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 / 6 карток</div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+
+  <div class="summary" id="summary">
+    <h3>🎉 Вітаю! Робочий зошит завершено</h3>
+    <div class="score" id="scoreText">0%</div>
+    <p id="summaryMsg">Ти пройшов усі рівні — від знання означень до творчості!</p>
+  </div>
+</div>
+
+<script>
+const cards = [
+  {
+    id: 1, level: 'Знаю', title: 'Перевірка бази',
+    goal: 'Перевірити знання означень і поняття розгорнутого кута.',
+    tasks: [
+      {
+        text: 'Запиши градусну міру розгорнутого кута.',
+        type: 'mc',
+        options: ['90°', '180°', '270°', '360°'],
+        correct: [1],
+        multi: false,
+        hint: 'Розгорнутий кут — це кут, сторони якого утворюють пряму.'
+      },
+      {
+        text: 'Закінчи речення: «Два кути називаються суміжними, якщо у них одна сторона спільна, а дві інші...»',
+        type: 'mc',
+        options: [
+          '...утворюють прямий кут.',
+          '...утворюють розгорнутий кут (пряму).',
+          '...дорівнюють одна одній.',
+          '...перетинаються під прямим кутом.'
+        ],
+        correct: [1],
+        multi: false,
+        hint: 'Подумай, що утворюють дві інші сторони суміжних кутів разом.'
+      },
+      {
+        text: 'Якщо один із двох кутів, утворених при перетині прямих, дорівнює 50°, чи може вертикальний йому кут дорівнювати 51°?',
+        type: 'mc',
+        options: [
+          'Так, може — вертикальні кути можуть відрізнятися на 1°.',
+          'Ні, не може — вертикальні кути завжди рівні, тому він теж 50°.',
+          'Так, якщо прямі перетинаються не під прямим кутом.',
+          'Ні, бо вертикальний кут завжди дорівнює 130°.'
+        ],
+        correct: [1],
+        multi: false,
+        hint: 'Згадай основну властивість вертикальних кутів: вони завжди рівні.'
+      }
+    ]
+  },
+  {
+    id: 2, level: 'Розумію', title: 'Розпізнавання',
+    goal: 'Перевірити вміння відрізняти суміжні кути від вертикальних на малюнку.',
+    tasks: [
+      {
+        text: 'Назви кут, суміжний із AOC.',
+        type: 'mc',
+        options: ['∠BOC', 'BOD', '∠AOD', 'COD'],
+        correct: [0, 2], // ∠BOC і ∠AOD — обидва суміжні з ∠AOC
+        multi: true,
+        hint: 'Суміжні кути мають спільну сторону, а інші дві утворюють пряму. У ∠AOC сторони — OA і OC. Шукай кути, що мають спільну сторону OA або OC.'
+      },
+      {
+        text: 'Назви кут, вертикальний до AOD.',
+        type: 'mc',
+        options: ['∠AOC', '∠BOC', '∠BOD', '∠COD'],
+        correct: [1],
+        multi: false,
+        hint: 'Вертикальні кути — ті, що розташовані навпроти один одного при перетині прямих.'
+      },
+      {
+        text: 'Чому кути ∠AOC і ∠BOD рівні?',
+        type: 'mc',
+        options: [
+          'Вони є суміжними кутами, а сума суміжних кутів завжди однакова.',
+          'Вони є вертикальними кутами, утвореними перетином прямих AB і CD, а вертикальні кути завжди рівні.',
+          'Вони утворюють разом розгорнутий кут, тому рівні між собою.',
+          'Промінь OS є бісектрисою, тому ділить кут навпіл.'
+        ],
+        correct: [1],
+        multi: false,
+        hint: 'Які це кути за типом — суміжні чи вертикальні? Яка їхня властивість?'
+      }
+    ],
+    figure: 'intersect'
+  },
+  {
+    id: 3, level: 'Застосую', title: 'Базові обчислення',
+    goal: 'Застосувати властивості суміжних і вертикальних кутів у стандартних задачах.',
+    tasks: [
+      {
+        text: 'Знайди кут, суміжний із кутом 75°.',
+        type: 'mc',
+        options: ['15°', '105°', '115°', '285°'],
+        correct: [1],
+        multi: false,
+        hint: 'Сума суміжних кутів = 180°.'
+      },
+      {
+        text: 'Один із суміжних кутів дорівнює 110°. Знайди інший кут.',
+        type: 'mc',
+        options: ['70°', '80°', '110°', '290°'],
+        correct: [0],
+        multi: false,
+        hint: 'Від 180° відніми відомий кут.'
+      },
+      {
+        text: 'Дві прямі перетинаються. Один із утворених кутів дорівнює 68°. Знайди міри трьох інших утворених кутів.',
+        type: 'mc',
+        options: [
+          '68°, 112°, 112°',
+          '68°, 68°, 112°',
+          '112°, 112°, 112°',
+          '68°, 68°, 68°'
+        ],
+        correct: [0],
+        multi: false,
+        hint: 'Вертикальний кут до 68° — теж 68°. Суміжні з ним — 180° − 68° = 112°.'
+      }
+    ]
+  },
+  {
+    id: 4, level: 'Аналізую', title: 'Пошук зв\'язків',
+    goal: 'Проаналізувати рисунок із кількома кутами та знайти приховані співвідношення.',
+    tasks: [
+      {
+        text: 'Сума двох суміжних кутів дорівнює 180°. Знайди їх, якщо один у 3 рази більший за інший.',
+        type: 'mc',
+        options: ['30° і 150°', '45° і 135°', '60° і 120°', '90° і 90°'],
+        correct: [1],
+        multi: false,
+        hint: 'Склади рівняння: x + 3x = 180°.'
+      },
+      {
+        text: 'Промінь OS ділить розгорнутий кут AB на два кути. Один із них на 40° більший за інший. Знайди ці кути.',
+        type: 'mc',
+        options: ['50° і 90°', '60° і 100°', '70° і 110°', '80° і 120°'],
+        correct: [2],
+        multi: false,
+        hint: 'Познач менший кут через x, тоді більший = x + 40°. Склади рівняння: x + (x + 40°) = 180°.'
+      }
+    ]
+  },
+  {
+    id: 5, level: 'Оцінюю', title: 'Пошук помилок',
+    goal: 'Критично оцінити розв\'язання та знайти помилку.',
+    tasks: [
+      {
+        text: 'Учень розв\'язав задачу: «Два суміжні кути дорівнюють 105° і 85°». Чи правильне його розв\'язання?',
+        type: 'mc',
+        options: [
+          'Так, правильне — сума кутів дорівнює 190°, що близько до 180°.',
+          'Ні, неправильне — сума суміжних кутів має дорівнювати 180°, а 105° + 85° = 190°.',
+          'Так, правильне — різниця між кутами дорівнює 20°.',
+          'Ні, неправильне — обидва кути мають бути гострими.'
+        ],
+        correct: [1],
+        multi: false,
+        hint: 'Обчисли суму 105° + 85° і порівняй з 180°.'
+      },
+      {
+        text: 'Який варіант виправлення задачі є правильним (сума кутів = 180°)?',
+        type: 'mc',
+        options: [
+          '105° і 85° (залишити без змін)',
+          '105° і 75° (змінити 85° на 75°)',
+          '115° і 85° (змінити 105° на 115°)',
+          '100° і 90° (змінити обидва кути)'
+        ],
+        correct: [1],
+        multi: false,
+        hint: 'Залиш один кут тим самим, а другий підбери так, щоб сума була 180°.'
+      }
+    ]
+  },
+  {
+    id: 6, level: 'Створю', title: 'Творче завдання',
+    goal: 'Самостійно сформулювати умову задачі за готовим образом.',
+    tasks: [
+      {
+        text: 'Намалюй дві пересічні прямі. Познач один із гострих кутів як 55°.',
+        type: 'drawing',
+        hint: 'Використовуй кнопку «Лінія» і малюй на полотні. Потім познач кут 55°.'
+      },
+      {
+        text: 'Сформулюй і запиши умову задачі для сусіда по парті, щоб він зміг знайти решту три кути. Після написання — перевір себе за рубрикою нижче.',
+        type: 'rubric',
+        placeholder: 'Умова: Дві прямі перетинаються в точці O. Один із кутів дорівнює 55°. Знайди...',
+        criteria: [
+          'У умові згадано перетин двох прямих (або точку перетину O)',
+          'Вказано значення кута 55°',
+          'Є запитання про знаходження інших кутів (наприклад: «Знайди решту три кути»)',
+          'Умова зрозуміла і її можна розв\'язати однозначно'
+        ],
+        sample: 'Приклад правильної умови: «Дві прямі AB і CD перетинаються в точці O. Один із утворених кутів ∠AOC = 55°. Знайди міри кутів AOD, ∠BOD і ∠BOC.»',
+        hint: 'Хороша умова задачі має: 1) опис ситуації (перетин прямих), 2) дані (55°), 3) запитання (що знайти).'
+      }
+    ]
+  }
+];
+
+function intersectSVG() {
+  return `
+  <svg viewBox="0 0 300 240" width="300" height="240" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#1a2332"/>
+      </marker>
+    </defs>
+    <line x1="20" y1="120" x2="280" y2="120" stroke="#1a2332" stroke-width="2"/>
+    <line x1="150" y1="20" x2="150" y2="220" stroke="#1a2332" stroke-width="2"/>
+    <path d="M 170 120 A 20 20 0 0 0 150 100" fill="none" stroke="#4f46e5" stroke-width="2"/>
+    <path d="M 150 100 A 20 20 0 0 0 130 120" fill="none" stroke="#0ea5e9" stroke-width="2"/>
+    <path d="M 130 120 A 20 20 0 0 0 150 140" fill="none" stroke="#10b981" stroke-width="2"/>
+    <path d="M 150 140 A 20 20 0 0 0 170 120" fill="none" stroke="#f59e0b" stroke-width="2"/>
+    <text x="275" y="115" font-family="Inter" font-size="14" font-weight="600" fill="#1a2332">B</text>
+    <text x="12" y="115" font-family="Inter" font-size="14" font-weight="600" fill="#1a2332">A</text>
+    <text x="155" y="16" font-family="Inter" font-size="14" font-weight="600" fill="#1a2332">C</text>
+    <text x="155" y="235" font-family="Inter" font-size="14" font-weight="600" fill="#1a2332">D</text>
+    <text x="155" y="115" font-family="Inter" font-size="13" font-weight="600" fill="#1a2332">O</text>
+  </svg>`;
+}
+
+const tabsEl = document.getElementById('tabs');
+const mainEl = document.getElementById('main');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const summaryEl = document.getElementById('summary');
+const scoreText = document.getElementById('scoreText');
+
+let currentCard = 0;
+const answers = {};
+
+function renderTabs() {
+  tabsEl.innerHTML = cards.map((c, i) => `
+    <button class="tab ${i === currentCard ? 'active' : ''} ${isCardDone(i) ? 'done' : ''}" data-i="${i}">
+      <span class="level">${c.level}</span>
+      <span>Картка ${c.id}</span>
+    </button>
+  `).join('');
+  tabsEl.querySelectorAll('.tab').forEach(t => {
+    t.onclick = () => {
+      currentCard = parseInt(t.dataset.i);
+      renderTabs();
+      renderCard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  });
+}
+
+function isCardDone(i) {
+  const c = cards[i];
+  const a = answers[c.id];
+  if (!a) return false;
+  return c.tasks.every((_, ti) => a[ti] && a[ti].checked && a[ti].ok);
+}
+
+function updateProgress() {
+  const done = cards.filter((_, i) => isCardDone(i)).length;
+  progressFill.style.width = (done / cards.length * 100) + '%';
+  progressText.textContent = `${done} / ${cards.length} карток`;
+  if (done === cards.length) {
+    summaryEl.classList.add('show');
+    const total = cards.reduce((s, c) => s + c.tasks.length, 0);
+    let correct = 0;
+    Object.values(answers).forEach(card => {
+      Object.values(card).forEach(t => { if (t.ok) correct++; });
+    });
+    scoreText.textContent = Math.round(correct / total * 100) + '%';
+  }
+}
+
+function renderCard() {
+  const c = cards[currentCard];
+  if (!answers[c.id]) answers[c.id] = {};
+
+  let html = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">${c.id}</div>
+        <div><div class="card-title">Картка ${c.id}. ${c.title}</div></div>
+        <span class="card-level">Рівень «${c.level}»</span>
+      </div>
+      <div class="card-goal"><strong>🎯 Мета:</strong> ${c.goal}</div>
+  `;
+
+  if (c.figure === 'intersect') {
+    html += `
+      <div class="figure">
+        ${intersectSVG()}
+        <div class="figure-caption">Рис. 1. Прямі AB і CD перетинаються в точці O</div>
+      </div>
+    `;
+  }
+
+  c.tasks.forEach((t, ti) => {
+    const state = answers[c.id][ti] || {};
+    const cls = state.checked ? (state.ok ? 'correct' : 'wrong') : '';
+    html += `<div class="task ${cls}" id="task-${ti}">
+      <div class="task-text">
+        <span class="task-num">${ti+1}</span>${t.text}
+        ${t.multi ? '<span class="task-hint-label">⚠ Обери всі правильні варіанти</span>' : ''}
+      </div>`;
+
+    if (t.type === 'mc') {
+      const letters = ['А', 'Б', 'В', 'Г'];
+      html += `<div class="options" id="opts-${ti}">`;
+      t.options.forEach((opt, oi) => {
+        const optCls = state.checked
+          ? (t.correct.includes(oi) ? 'correct' : (state.selected && state.selected.includes(oi) ? 'wrong' : ''))
+          : '';
+        const inputType = t.multi ? 'checkbox' : 'radio';
+        html += `
+          <div class="option ${optCls}">
+            <input type="${inputType}" name="task-${ti}" id="opt-${ti}-${oi}" value="${oi}" 
+              ${state.selected && state.selected.includes(oi) ? 'checked' : ''} 
+              ${state.checked ? 'disabled' : ''}>
+            <label for="opt-${ti}-${oi}">
+              <span class="letter">${letters[oi]}</span>
+              <span>${opt}</span>
+            </label>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    } else if (t.type === 'textarea') {
+      html += `<textarea id="inp-${ti}" placeholder="${t.placeholder || ''}" class="${state.checked ? (state.ok ? 'ok' : 'bad') : ''}">${state.value || ''}</textarea>`;
+    } else if (t.type === 'rubric') {
+      html += `<textarea id="inp-${ti}" placeholder="${t.placeholder || ''}" class="${state.checked ? (state.ok ? 'ok' : 'bad') : ''}">${state.value || ''}</textarea>`;
+      html += `<div class="rubric">
+        <div class="rubric-title">📋 Рубрика самоперевірки (постав галочку навпроти виконаних критеріїв):</div>`;
+      t.criteria.forEach((cr, ci) => {
+        const checked = state.criteria && state.criteria[ci] ? 'checked' : '';
+        html += `
+          <div class="rubric-item">
+            <input type="checkbox" id="crit-${ti}-${ci}" ${checked} ${state.checked ? 'disabled' : ''}>
+            <label for="crit-${ti}-${ci}">${cr}</label>
+          </div>
+        `;
+      });
+      html += `<div class="rubric-score" id="rubric-score-${ti}">Виконано: 0 / ${t.criteria.length} критеріїв</div>`;
+      html += `</div>`;
+      html += `<button class="btn btn-hint" style="margin-top:10px;" id="sampleBtn-${ti}">👁 Показати зразок правильної умови</button>`;
+      html += `<div class="sample-box" id="sample-${ti}"><strong>📝 Зразок:</strong>${t.sample}</div>`;
+    } else if (t.type === 'drawing') {
+      html += `
+        <div class="drawing-area">
+          <svg id="draw-${ti}" viewBox="0 0 400 280" width="400" height="280" style="background:#fff;border-radius:8px;">
+            <rect width="400" height="280" fill="#fafafa"/>
+          </svg>
+          <div class="draw-controls">
+            <button class="draw-btn active" data-tool="line" data-ti="${ti}">✏️ Лінія</button>
+            <button class="draw-btn" data-tool="angle" data-ti="${ti}">📐 Позначити кут 55°</button>
+            <button class="draw-btn" data-tool="clear" data-ti="${ti}">🗑 Очистити</button>
+          </div>
+          <div style="font-size:0.8rem;color:#6b7280;margin-top:6px;">Клікай по полотну, щоб малювати. Для лінії — дві точки.</div>
+        </div>
+      `;
+    }
+
+    html += `<div class="feedback" id="fb-${ti}"></div>
+      <div class="hint-box" id="hint-${ti}">💡 ${t.hint || ''}</div>
+    </div>`;
+  });
+
+  html += `
+    <div class="actions">
+      <button class="btn btn-primary" id="checkBtn">✓ Перевірити картку</button>
+      <button class="btn btn-hint" id="hintBtn"> Підказки</button>
+      <button class="btn btn-secondary" id="resetBtn">↺ Очистити</button>
+    </div>
+  `;
+  html += `</div>`;
+  mainEl.innerHTML = html;
+
+  document.getElementById('checkBtn').onclick = () => checkCard();
+  document.getElementById('hintBtn').onclick = () => {
+    c.tasks.forEach((_, ti) => {
+      document.getElementById(`hint-${ti}`).classList.toggle('show');
+    });
+  };
+  document.getElementById('resetBtn').onclick = () => {
+    answers[c.id] = {};
+    renderCard();
+  };
+
+  // Rubric sample buttons
+  c.tasks.forEach((t, ti) => {
+    if (t.type === 'rubric') {
+      const sampleBtn = document.getElementById(`sampleBtn-${ti}`);
+      if (sampleBtn) {
+        sampleBtn.onclick = () => {
+          document.getElementById(`sample-${ti}`).classList.toggle('show');
+        };
+      }
+      // Rubric live score
+      t.criteria.forEach((_, ci) => {
+        const cb = document.getElementById(`crit-${ti}-${ci}`);
+        if (cb) {
+          cb.onchange = () => updateRubricScore(ti, t.criteria.length);
+        }
+      });
+    }
+  });
+
+  if (c.tasks.some(t => t.type === 'drawing')) {
+    initDrawing();
+  }
+}
+
+function updateRubricScore(ti, total) {
+  let count = 0;
+  for (let i = 0; i < total; i++) {
+    const cb = document.getElementById(`crit-${ti}-${i}`);
+    if (cb && cb.checked) count++;
+  }
+  const el = document.getElementById(`rubric-score-${ti}`);
+  if (el) {
+    el.textContent = `Виконано: ${count} / ${total} критеріїв`;
+    if (count === total) {
+      el.style.background = '#dcfce7';
+      el.style.color = '#166534';
+      el.textContent += ' ✓ Чудово!';
+    } else {
+      el.style.background = '#eef2ff';
+      el.style.color = '#4f46e5';
+    }
+  }
+}
+
+function checkCard() {
+  const c = cards[currentCard];
+  c.tasks.forEach((t, ti) => {
+    if (t.type === 'mc') {
+      const checked = document.querySelectorAll(`input[name="task-${ti}"]:checked`);
+      if (checked.length === 0) {
+        const fb = document.getElementById(`fb-${ti}`);
+        fb.className = 'feedback show bad';
+        fb.textContent = t.multi ? '⚠ Обери хоча б один варіант.' : '⚠ Обери один із варіантів відповіді.';
+        return;
+      }
+      const selected = Array.from(checked).map(el => parseInt(el.value)).sort();
+      const correct = [...t.correct].sort();
+      const ok = selected.length === correct.length && selected.every((v, i) => v === correct[i]);
+      answers[c.id][ti] = { checked: true, ok, selected };
+      const fb = document.getElementById(`fb-${ti}`);
+      const task = document.getElementById(`task-${ti}`);
+      if (ok) {
+        fb.className = 'feedback show ok';
+        fb.innerHTML = `✓ Правильно! ${t.multi ? 'Усі правильні варіанти обрано.' : 'Чудова робота.'}`;
+        task.classList.remove('wrong');
+        task.classList.add('correct');
+      } else {
+        const letters = ['А', 'Б', 'В', 'Г'];
+        const correctStr = correct.map(i => `${letters[i]}) ${t.options[i]}`).join(', ');
+        fb.className = 'feedback show bad';
+        fb.innerHTML = `✗ Неправильно. Правильн${t.multi ? 'і' : 'а'} відповід${t.multi ? 'і' : 'ь'}: <strong>${correctStr}</strong>`;
+        task.classList.remove('correct');
+        task.classList.add('wrong');
+      }
+    } else if (t.type === 'textarea') {
+      const el = document.getElementById(`inp-${ti}`);
+      const value = el.value;
+      const ok = t.check(value);
+      el.classList.remove('ok','bad');
+      el.classList.add(ok ? 'ok' : 'bad');
+      answers[c.id][ti] = { checked: true, ok, value };
+      const fb = document.getElementById(`fb-${ti}`);
+      const task = document.getElementById(`task-${ti}`);
+      if (ok) {
+        fb.className = 'feedback show ok';
+        fb.innerHTML = `✓ Чудово! ${t.correct ? '<br><small>' + t.correct + '</small>' : ''}`;
+        task.classList.remove('wrong');
+        task.classList.add('correct');
+      } else {
+        fb.className = 'feedback show bad';
+        fb.innerHTML = `✗ Спробуй ще раз. Орієнтовна правильна відповідь: <strong>${t.correct}</strong>`;
+        task.classList.remove('correct');
+        task.classList.add('wrong');
+      }
+    } else if (t.type === 'rubric') {
+      const el = document.getElementById(`inp-${ti}`);
+      const value = el.value;
+      const criteriaChecked = [];
+      t.criteria.forEach((_, ci) => {
+        const cb = document.getElementById(`crit-${ti}-${ci}`);
+        criteriaChecked.push(cb && cb.checked);
+      });
+      const score = criteriaChecked.filter(Boolean).length;
+      const ok = score >= 3 && value.length >= 30;
+      answers[c.id][ti] = { checked: true, ok, value, criteria: criteriaChecked, score };
+      const fb = document.getElementById(`fb-${ti}`);
+      const task = document.getElementById(`task-${ti}`);
+      if (ok) {
+        fb.className = 'feedback show ok';
+        fb.innerHTML = `✓ Чудово! Ти виконав ${score} з ${t.criteria.length} критеріїв. Умова задачі складена правильно.`;
+        task.classList.remove('wrong');
+        task.classList.add('correct');
+      } else {
+        fb.className = 'feedback show info';
+        fb.innerHTML = `📝 Ти виконав ${score} з ${t.criteria.length} критеріїв. ${score < 3 ? 'Доповни умову, щоб вона відповідала всім критеріям.' : 'Розшир умову — напиши більше деталей.'} Порівняй із зразком нижче.`;
+        document.getElementById(`sample-${ti}`).classList.add('show');
+        task.classList.remove('wrong');
+        task.classList.add('correct');
+      }
+    } else if (t.type === 'drawing') {
+      const svg = document.getElementById(`draw-${ti}`);
+      const hasContent = svg && svg.querySelectorAll('line, path, text').length > 1;
+      answers[c.id][ti] = { checked: true, ok: hasContent, value: '' };
+      const fb = document.getElementById(`fb-${ti}`);
+      if (hasContent) {
+        fb.className = 'feedback show ok';
+        fb.textContent = '✓ Чудово! Рисунок створено.';
+      } else {
+        fb.className = 'feedback show bad';
+        fb.textContent = '✗ Намалюй щось на полотні.';
+      }
+    }
+  });
+  updateProgress();
+  renderTabs();
+}
+
+function initDrawing() {
+  document.querySelectorAll('.draw-btn').forEach(btn => {
+    btn.onclick = () => {
+      const ti = btn.dataset.ti;
+      document.querySelectorAll(`.draw-btn[data-ti="${ti}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const svg = document.getElementById(`draw-${ti}`);
+      svg.dataset.tool = btn.dataset.tool;
+      if (btn.dataset.tool === 'clear') {
+        svg.innerHTML = '<rect width="400" height="280" fill="#fafafa"/>';
+        btn.classList.remove('active');
+        document.querySelector(`.draw-btn[data-tool="line"][data-ti="${ti}"]`).classList.add('active');
+        svg.dataset.tool = 'line';
+        svg.dataset.points = '';
+      }
+    };
+  });
+
+  cards[currentCard].tasks.forEach((t, ti) => {
+    if (t.type !== 'drawing') return;
+    const svg = document.getElementById(`draw-${ti}`);
+    svg.dataset.tool = 'line';
+    svg.dataset.points = '';
+
+    svg.addEventListener('click', (e) => {
+      const rect = svg.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (400 / rect.width);
+      const y = (e.clientY - rect.top) * (280 / rect.height);
+      const tool = svg.dataset.tool;
+
+      if (tool === 'line') {
+        const pts = svg.dataset.points ? svg.dataset.points.split(',').map(Number) : [];
+        pts.push(x, y);
+        if (pts.length === 4) {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', pts[0]);
+          line.setAttribute('y1', pts[1]);
+          line.setAttribute('x2', pts[2]);
+          line.setAttribute('y2', pts[3]);
+          line.setAttribute('stroke', '#1a2332');
+          line.setAttribute('stroke-width', '2');
+          svg.appendChild(line);
+          svg.dataset.points = '';
+        } else {
+          svg.dataset.points = pts.join(',');
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', x);
+          c.setAttribute('cy', y);
+          c.setAttribute('r', 3);
+          c.setAttribute('fill', '#4f46e5');
+          svg.appendChild(c);
+        }
+      } else if (tool === 'angle') {
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', x);
+        txt.setAttribute('y', y);
+        txt.setAttribute('font-family', 'Caveat');
+        txt.setAttribute('font-size', '22');
+        txt.setAttribute('font-weight', '600');
+        txt.setAttribute('fill', '#4f46e5');
+        txt.textContent = '55°';
+        svg.appendChild(txt);
+        const arc = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arc.setAttribute('d', `M ${x+20} ${y} A 20 20 0 0 0 ${x+14} ${y-14}`);
+        arc.setAttribute('fill', 'none');
+        arc.setAttribute('stroke', '#4f46e5');
+        arc.setAttribute('stroke-width', '2');
+        svg.appendChild(arc);
+      }
+    });
+  });
+}
+
+renderTabs();
+renderCard();
+updateProgress();
+</script>
+</body>
+</html>
